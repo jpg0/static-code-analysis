@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2022 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -24,7 +24,7 @@ import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.FileContents;
 import com.puppycrawl.tools.checkstyle.api.TextBlock;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CheckUtil;
+import com.puppycrawl.tools.checkstyle.checks.javadoc.MissingJavadocMethodCheck;
 import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
@@ -112,9 +112,7 @@ public class JavadocMethodStyleCheck extends AbstractCheck {
 
     @Override
     public int[] getAcceptableTokens() {
-        /**
-         * The check will be executed for method and constructor declarations.
-         */
+        // The check will be executed for method and constructor declarations.
         return new int[] { TokenTypes.METHOD_DEF, TokenTypes.CTOR_DEF, };
     }
 
@@ -125,8 +123,8 @@ public class JavadocMethodStyleCheck extends AbstractCheck {
 
     @Override
     public void visitToken(DetailAST ast) {
-        boolean skipCheck = (CheckUtil.isSetterMethod(ast) || CheckUtil.isGetterMethod(ast))
-                && allowMissingPropertyJavadoc;
+        boolean skipCheck = (MissingJavadocMethodCheck.isSetterMethod(ast)
+                || MissingJavadocMethodCheck.isGetterMethod(ast)) && allowMissingPropertyJavadoc;
         if (!skipCheck) {
             visit(ast);
         }
@@ -139,7 +137,7 @@ public class JavadocMethodStyleCheck extends AbstractCheck {
 
         if (textBlock != null) {
             String[] text = textBlock.getText();
-            lineNumberToLineText = new HashMap<Integer, String>();
+            lineNumberToLineText = new HashMap<>();
             tagLines = new ArrayList<>();
 
             for (int javadocLineIndex = 0; javadocLineIndex < text.length; javadocLineIndex++) {
@@ -206,7 +204,6 @@ public class JavadocMethodStyleCheck extends AbstractCheck {
         lineNumberToLineText.forEach((lineNumber, lineText) -> {
             if (lineText.contains(group)) {
                 log(lineNumber, message);
-                return;
             }
         });
     }

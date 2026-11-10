@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2022 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -34,7 +34,7 @@ public class NoEmptyLineSeparatorCheckTest extends AbstractStaticCheckTest {
     private static DefaultConfiguration config = createModuleConfig(NoEmptyLineSeparatorCheck.class);
 
     @Override
-    protected String getPackageLocation() {
+    public String getPackageLocation() {
         return "checkstyle/noEmptyLineSeparatorCheck";
     }
 
@@ -114,7 +114,7 @@ public class NoEmptyLineSeparatorCheckTest extends AbstractStaticCheckTest {
     }
 
     @Test
-    public void verifyValidConstuctorDefinition() throws Exception {
+    public void verifyValidConstructorDefinition() throws Exception {
         verifyJavaFileNoErrors("ValidConstructorDefinition.java");
     }
 
@@ -232,7 +232,7 @@ public class NoEmptyLineSeparatorCheckTest extends AbstractStaticCheckTest {
         String[] expectedMessages = generateExpectedMessages(12, MSG_LINE_AFTER_OPENING_BRACE_EMPTY, 29,
                 MSG_LINE_BEFORE_CLOSING_BRACE_EMPTY, 16, MSG_LINE_BEFORE_CLOSING_BRACE_EMPTY, 19, MSG_FOR_EMPTY_LINE,
                 27, MSG_LINE_BEFORE_CLOSING_BRACE_EMPTY);
-        verifyJavaFile("MutlitpleEmptyLinesInSwitchWithCases.java", expectedMessages);
+        verifyJavaFile("MultipleEmptyLinesInSwitchWithCases.java", expectedMessages);
     }
 
     @Test
@@ -243,6 +243,14 @@ public class NoEmptyLineSeparatorCheckTest extends AbstractStaticCheckTest {
     @Test
     public void verifyValidEmptyDefault() throws Exception {
         verifyJavaFileNoErrors("ValidEmptyDefaultDefinition.java");
+    }
+
+    @Test
+    public void verifyEmptyLineInMethodAfterSwitchWithoutBraces() throws Exception {
+        // the state of a case group without braces must not leak into the following blocks
+        String[] expectedMessages = generateExpectedMessages(13, MSG_LINE_AFTER_OPENING_BRACE_EMPTY, 15,
+                MSG_LINE_BEFORE_CLOSING_BRACE_EMPTY);
+        verifyJavaFile("EmptyLineInMethodAfterSwitchWithoutBraces.java", expectedMessages);
     }
 
     private void verifyJavaFile(String testFileName, String[] expectedMessages) throws Exception {

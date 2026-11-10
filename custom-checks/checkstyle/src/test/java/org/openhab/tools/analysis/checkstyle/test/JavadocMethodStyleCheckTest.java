@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2022 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -33,7 +33,7 @@ public class JavadocMethodStyleCheckTest extends AbstractStaticCheckTest {
     private DefaultConfiguration configuration = createModuleConfig(JavadocMethodStyleCheck.class);
 
     @Override
-    protected String getPackageLocation() {
+    public String getPackageLocation() {
         return "checkstyle/javadocMethodStyleCheckTest";
     }
 
@@ -106,7 +106,7 @@ public class JavadocMethodStyleCheckTest extends AbstractStaticCheckTest {
     }
 
     @Test
-    public void testMethoJavadocdWithAllWrongDescriptions() throws Exception {
+    public void testMethodJavadocWithAllWrongDescriptions() throws Exception {
         String fileName = "MethodWithWrongJavadoc.java";
         String[] expectedMessages = generateExpectedMessages(6, EXPECTED_MESSAGE_CONTAINS_DASH, 7,
                 EXPECTED_MESSAGE_PARAMETER_DESCRIPTION_NEWLINE, 8, EXPECTED_MESSAGE_EMPTY_LINES_BETWEEN_TAGS, 9,
@@ -119,20 +119,14 @@ public class JavadocMethodStyleCheckTest extends AbstractStaticCheckTest {
     @Test
     public void testMethodJavadocWithParameterNameWithNoDescription() throws Exception {
         String fileName = "MethodWithNoParamNameDescription.java";
-        /**
-         * methods with missing parameter descriptions should not log anything
-         * so we pass empty array
-         */
+        // methods with missing parameter descriptions should not log anything so we pass empty array
         checkFile(fileName, CommonUtil.EMPTY_STRING_ARRAY);
     }
 
     @Test
     public void testMethodJavadocWithProperTagParameterNameAndDescription() throws Exception {
         String fileName = "MethodWithProperDescriptions.java";
-        /**
-         * methods with proper parameter description should not log anything
-         * so we pass empty array
-         */
+        // methods with proper parameter description should not log anything so we pass empty array
         checkFile(fileName, CommonUtil.EMPTY_STRING_ARRAY);
     }
 

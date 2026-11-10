@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2022 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -17,11 +17,10 @@ import static org.openhab.tools.analysis.checkstyle.api.CheckConstants.OH_INF_PA
 import java.io.File;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openhab.tools.analysis.checkstyle.OhInfXmlLabelCheck;
 import org.openhab.tools.analysis.checkstyle.OhInfXmlValidationCheck;
 import org.openhab.tools.analysis.checkstyle.api.AbstractStaticCheckTest;
@@ -42,14 +41,14 @@ public class OhInfXmlLabelCheckTest extends AbstractStaticCheckTest {
 
     private DefaultConfiguration configuration;
 
-    @Before
+    @BeforeEach
     public void before() {
         configuration = createModuleConfig(OhInfXmlLabelCheck.class);
         configuration.addProperty("checkWordCasing", "true");
     }
 
     @Override
-    protected String getPackageLocation() {
+    public String getPackageLocation() {
         return "checkstyle/ohInfXmlLabelCheckTest";
     }
 
@@ -123,9 +122,9 @@ public class OhInfXmlLabelCheckTest extends AbstractStaticCheckTest {
             final String[] expectedMessages) throws Exception {
         final String directoryPath = getPath(testSubDirectory);
         final File testDirectoryPath = new File(directoryPath);
-        final File[] testFiles = listFilesForFolder(testDirectoryPath, new ArrayList<File>());
-        verify(createChecker(configuration), testFiles, directoryPath + testFilePath, Stream.of(expectedMessages)
-                .map(s -> s.replace("''", "'")).collect(Collectors.toList()).toArray(new String[0]));
+        final File[] testFiles = listFilesForFolder(testDirectoryPath, new ArrayList<>());
+        verify(createChecker(configuration), testFiles, directoryPath + testFilePath,
+                Stream.of(expectedMessages).map(s -> s.replace("''", "'")).toArray(String[]::new));
     }
 
     private File[] listFilesForFolder(final File folder, final ArrayList<File> files) {

@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2022 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -21,6 +21,7 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Stream;
 
 import org.openhab.tools.analysis.checkstyle.api.AbstractOhInfXmlCheck;
 import org.openhab.tools.analysis.checkstyle.api.CheckConstants;
@@ -87,8 +88,8 @@ public class OhInfXmlUsageCheck extends AbstractOhInfXmlCheck {
     }
 
     @Override
-    protected void checkBindingFile(final FileText xmlFileText) throws CheckstyleException {
-        // The allowed values are described in the binding XSD
+    protected void checkAddonFile(final FileText xmlFileText) throws CheckstyleException {
+        // The allowed values are described in the addon XSD
         allConfigDescriptionRefs.putAll(evaluateExpressionOnFile(xmlFileText, CONFIG_DESCRIPTION_REF_EXPRESSION));
         allConfigDescriptions.putAll(evaluateExpressionOnFile(xmlFileText, CONFIG_DESCRIPTION_EXPRESSION));
     }
@@ -137,9 +138,8 @@ public class OhInfXmlUsageCheck extends AbstractOhInfXmlCheck {
                 if (!Files.exists(osgiInfPath)) {
                     return uriFileMap;
                 }
-                try {
-                    Files.list(osgiInfPath)
-                            .forEach(xmlPath -> uriFileMap.putAll(getConfigurableServiceRefsFromXml(xmlPath)));
+                try (Stream<Path> pathStream = Files.list(osgiInfPath)) {
+                    pathStream.forEach(xmlPath -> uriFileMap.putAll(getConfigurableServiceRefsFromXml(xmlPath)));
                 } catch (IOException e) {
                 }
                 break;

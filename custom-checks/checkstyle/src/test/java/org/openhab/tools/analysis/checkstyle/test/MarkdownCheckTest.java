@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2022 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -39,7 +39,7 @@ public class MarkdownCheckTest extends AbstractStaticCheckTest {
     }
 
     @Override
-    protected String getPackageLocation() {
+    public String getPackageLocation() {
         return "checkstyle/markdownCheckTest";
     }
 
@@ -50,7 +50,7 @@ public class MarkdownCheckTest extends AbstractStaticCheckTest {
     }
 
     @Test
-    public void testForbiddNodeVisit() throws Exception {
+    public void testForbiddenNodeVisit() throws Exception {
         verifyMarkDownFile("testForbiddenNodeVisit", noMessagesExpected());
     }
 
@@ -134,16 +134,16 @@ public class MarkdownCheckTest extends AbstractStaticCheckTest {
     }
 
     @Test
-    public void testCodeSectionAtBeginingOfFile() throws Exception {
+    public void testCodeSectionAtBeginningOfFile() throws Exception {
         String[] expectedMessages = generateExpectedMessages(1,
                 "The line before code formatting section must be empty.");
-        verifyMarkDownFile("testCodeSectionAtBeginingOfFile", expectedMessages);
+        verifyMarkDownFile("testCodeSectionAtBeginningOfFile", expectedMessages);
     }
 
     @Test
-    public void testListAtBeginingOfFile() throws Exception {
+    public void testListAtBeginningOfFile() throws Exception {
         String[] expectedMessages = generateExpectedMessages(1, "The line before a Markdown list must be empty.");
-        verifyMarkDownFile("testListAtBeginingOfFile", expectedMessages);
+        verifyMarkDownFile("testListAtBeginningOfFile", expectedMessages);
     }
 
     @Test
@@ -174,8 +174,8 @@ public class MarkdownCheckTest extends AbstractStaticCheckTest {
     }
 
     @Test
-    public void testListBeginingSameAsAnotherLineBegining() throws Exception {
-        verifyMarkDownFile("testListBeginingSameAsAnotherLineBegining", noMessagesExpected());
+    public void testListBeginningSameAsAnotherLineBeginning() throws Exception {
+        verifyMarkDownFile("testListBeginningSameAsAnotherLineBeginning", noMessagesExpected());
     }
 
     @Test
@@ -247,6 +247,11 @@ public class MarkdownCheckTest extends AbstractStaticCheckTest {
     public void testDocFolderWrong() throws Exception {
         String[] expectedMessages = generateExpectedMessages(3, "Images must be located in the doc/ folder.");
         verifyMarkDownFile("testDocFolderWrong", expectedMessages);
+    }
+
+    @Test
+    public void testFrontMatterIgnored() throws Exception {
+        verifyMarkDownFile("testFrontMatterIgnored", noMessagesExpected());
     }
 
     private void createValidConfig() {

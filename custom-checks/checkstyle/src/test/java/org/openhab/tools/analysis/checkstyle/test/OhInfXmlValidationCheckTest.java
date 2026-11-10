@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2022 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -15,19 +15,32 @@ package org.openhab.tools.analysis.checkstyle.test;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.openhab.tools.analysis.checkstyle.api.CheckConstants.OH_INF_PATH;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
+
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openhab.tools.analysis.checkstyle.OhInfXmlValidationCheck;
 import org.openhab.tools.analysis.checkstyle.api.AbstractStaticCheckTest;
 import org.openhab.tools.analysis.utils.CachingHttpClient;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 
 import com.puppycrawl.tools.checkstyle.DefaultConfiguration;
 import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
@@ -42,43 +55,87 @@ public class OhInfXmlValidationCheckTest extends AbstractStaticCheckTest {
 
     private static final String RELATIVE_PATH_TO_THING = File.separator + OH_INF_PATH + File.separator
             + OhInfXmlValidationCheck.THING_DIRECTORY + File.separator + "thing-types.xml";
-    private static final String RELATIVE_PATH_TO_BINDING = File.separator + OH_INF_PATH + File.separator
-            + OhInfXmlValidationCheck.BINDING_DIRECTORY + File.separator + "bind.xml";
+    private static final String RELATIVE_PATH_TO_ADDON = File.separator + OH_INF_PATH + File.separator
+            + OhInfXmlValidationCheck.ADDON_DIRECTORY + File.separator + "addon.xml";
     private static final String RELATIVE_PATH_TO_CONFIG = File.separator + OH_INF_PATH + File.separator
             + OhInfXmlValidationCheck.CONFIGURATION_DIRECTORY + File.separator + "conf.xml";
 
     private static final String SCHEMA_ROOT_URL = "https://openhab.org/schemas/";
     private static final String THING_SCHEMA_URL = SCHEMA_ROOT_URL + "thing-description-1.0.0.xsd";
-    private static final String BINDING_SCHEMA_URL = SCHEMA_ROOT_URL + "binding-1.0.0.xsd";
+    private static final String ADDON_SCHEMA_URL = SCHEMA_ROOT_URL + "addon-1.0.0.xsd";
     private static final String CONFIG_SCHEMA_URL = SCHEMA_ROOT_URL + "config-description-1.0.0.xsd";
 
     private static final String MESSAGE_EMPTY_FILE = "The file {0} should not be empty.";
-    private static final String MESSAGE_NOT_INCLUDED_XML_FILE = "The file {0} isn't included in the build.properties file. Good approach is to include all files by adding `OH-INF/` value to the bin.includes property.";
 
     private static final DefaultConfiguration CONFIGURATION = createModuleConfig(OhInfXmlValidationCheck.class);
 
+    private static Locale initialLocale;
+
     @BeforeAll
     public static void createConfiguration() {
+        initialLocale = Locale.getDefault();
         CONFIGURATION.addProperty("thingSchema", THING_SCHEMA_URL);
-        CONFIGURATION.addProperty("bindingSchema", BINDING_SCHEMA_URL);
+        CONFIGURATION.addProperty("addonSchema", ADDON_SCHEMA_URL);
         CONFIGURATION.addProperty("configSchema", CONFIG_SCHEMA_URL);
     }
 
+    @AfterAll
+    @SuppressWarnings("PMD.SetDefaultLocale")
+    public static void tearDownClass() {
+        // Set the default locale to its initial value.
+        Locale.setDefault(initialLocale);
+    }
+
     @Override
-    protected String getPackageLocation() {
+    public String getPackageLocation() {
         return "checkstyle/ohInfXmlValidationCheckTest";
     }
 
     private boolean isResourceAvailable;
+    private String thingSchema;
+
+    private static Document parseXml(String xml) throws Exception {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        factory.setXIncludeAware(false);
+        factory.setExpandEntityReferences(false);
+
+        try (InputStream inputStream = new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8))) {
+            return factory.newDocumentBuilder().parse(inputStream);
+        }
+    }
+
+    private static String generateInvalidItemTypeMessage(String invalidValue, String schema) throws Exception {
+        Document document = parseXml(schema);
+        XPath xpath = XPathFactory.newInstance().newXPath();
+
+        NodeList values = (NodeList) xpath.evaluate(
+                "//*[local-name()='simpleType'][@name='itemTypeName']" + "//*[local-name()='enumeration']/@value",
+                document, XPathConstants.NODESET);
+
+        List<String> itemTypes = new ArrayList<>();
+        for (int i = 0; i < values.getLength(); i++) {
+            itemTypes.add(values.item(i).getNodeValue());
+        }
+
+        return "Value " + invalidValue + " is not facet-valid with respect to enumeration ["
+                + String.join(", ", itemTypes) + "]. It must be a value from the enumeration.";
+    }
 
     @BeforeEach
+    @SuppressWarnings("PMD.SetDefaultLocale")
     public void checkConnection() {
-        Locale.setDefault(new Locale("en", "US"));
+        Locale.setDefault(Locale.US);
         try {
-            URL url = new URL(THING_SCHEMA_URL);
-            CachingHttpClient<String> cachingClient = new CachingHttpClient<>(c -> new String(c));
-            isResourceAvailable = cachingClient.get(url) != null;
+            URL url = URI.create(THING_SCHEMA_URL).toURL();
+            CachingHttpClient<String> cachingClient = new CachingHttpClient<>(String::new);
+            thingSchema = cachingClient.get(url);
+            isResourceAvailable = thingSchema != null;
         } catch (IOException e) {
+            thingSchema = null;
             isResourceAvailable = false;
         }
     }
@@ -158,13 +215,13 @@ public class OhInfXmlValidationCheckTest extends AbstractStaticCheckTest {
     }
 
     @Test
-    public void testInvalidBinding() throws Exception {
+    public void testInvalidAddon() throws Exception {
         assumeTrue(isResourceAvailable);
 
         int lineNumber = 7;
         String[] expectedMessages = generateExpectedMessages(lineNumber,
-                "The content of element binding:binding is not complete. One of {name} is expected.");
-        verifyWithPath("invalidBinding", RELATIVE_PATH_TO_BINDING, expectedMessages);
+                "The content of element addon:addon is not complete. One of {type} is expected.");
+        verifyWithPath("invalidAddon", RELATIVE_PATH_TO_ADDON, expectedMessages);
     }
 
     @Test
@@ -175,6 +232,17 @@ public class OhInfXmlValidationCheckTest extends AbstractStaticCheckTest {
         String[] expectedMessages = generateExpectedMessages(lineNumber,
                 "The content of element config-description:config-descriptions is not complete. One of {config-description} is expected.");
         verifyWithPath("invalidConfig", RELATIVE_PATH_TO_CONFIG, expectedMessages);
+    }
+
+    @Test
+    public void testInvalidItemType() throws Exception {
+        assumeTrue(isResourceAvailable);
+
+        int lineNumber = 15;
+        String[] expectedMessages = generateExpectedMessages(lineNumber,
+                generateInvalidItemTypeMessage("Invalid", thingSchema));
+
+        verifyWithPath("invalidItemType", RELATIVE_PATH_TO_THING, expectedMessages);
     }
 
     @Test
@@ -195,25 +263,16 @@ public class OhInfXmlValidationCheckTest extends AbstractStaticCheckTest {
         verifyWithPath("emptyThingTypeXml", RELATIVE_PATH_TO_THING, expectedMessages);
     }
 
-    @Test
-    public void testMissingXmlFileInBuildProperties() throws Exception {
-        int lineNumber = 0;
-        String[] expectedMessages = generateExpectedMessages(lineNumber,
-                MessageFormat.format(MESSAGE_NOT_INCLUDED_XML_FILE,
-                        "OH-INF" + File.separator + "thing" + File.separator + "thing-types.xml"));
-        verifyWithPath("missingXmlFileInBuildProperties", RELATIVE_PATH_TO_THING, expectedMessages);
-    }
-
     private void verifyWithPath(String testSubDirectory, String testFilePath, String[] expectedMessages)
             throws Exception {
         String directoryPath = getPath(testSubDirectory);
         File testDirectoryPath = new File(directoryPath);
 
-        File[] testFiles = listFilesForFolder(testDirectoryPath, new ArrayList<File>());
+        File[] testFiles = listFilesForFolder(testDirectoryPath, new ArrayList<>());
         verify(createChecker(CONFIGURATION), testFiles, directoryPath + testFilePath, expectedMessages);
     }
 
-    private File[] listFilesForFolder(File folder, ArrayList<File> files) {
+    private File[] listFilesForFolder(File folder, List<File> files) {
         for (File fileEntry : folder.listFiles()) {
             if (fileEntry.isDirectory()) {
                 listFilesForFolder(fileEntry, files);

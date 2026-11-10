@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2022 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -19,8 +19,8 @@ import java.util.Map;
 
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
+import com.puppycrawl.tools.checkstyle.api.FullIdent;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CheckUtil;
 import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
@@ -73,7 +73,7 @@ public class ForbiddenPackageUsageCheck extends AbstractCheck {
 
     @Override
     public void visitToken(DetailAST ast) {
-        importsToLineNumbers.put(CheckUtil.createFullType(ast).getText(), ast.getLineNo());
+        importsToLineNumbers.put(FullIdent.createFullIdent(ast.getFirstChild()).getText(), ast.getLineNo());
     }
 
     @Override
@@ -85,7 +85,7 @@ public class ForbiddenPackageUsageCheck extends AbstractCheck {
     public void finishTree(DetailAST ast) {
         importsToLineNumbers.entrySet().stream()
                 .filter(entry -> forbiddenPackages.stream().anyMatch(entry.getKey()::contains))
-                .filter(entry -> !exceptions.stream().anyMatch(entry.getKey()::contains))
+                .filter(entry -> exceptions.stream().noneMatch(entry.getKey()::contains))
                 .forEach(entry -> log(entry.getValue(), String.format(MESSAGE, entry.getKey())));
     }
 }

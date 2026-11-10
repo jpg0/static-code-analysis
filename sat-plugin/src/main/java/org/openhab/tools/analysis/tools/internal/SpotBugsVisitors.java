@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2022 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -15,10 +15,10 @@ package org.openhab.tools.analysis.tools.internal;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
 import org.apache.commons.lang3.StringUtils;
+
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 /**
  * A JAXB model of the SpotBugs visitors XML file
@@ -29,7 +29,7 @@ import org.apache.commons.lang3.StringUtils;
 public class SpotBugsVisitors {
 
     @XmlElement
-    List<String> visitor = new ArrayList<String>();
+    List<String> visitor = new ArrayList<>();
 
     @Override
     public String toString() {

@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2022 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -14,7 +14,7 @@ package org.openhab.tools.analysis.pmd.test;
 
 import org.junit.jupiter.api.BeforeEach;
 
-import net.sourceforge.pmd.testframework.SimpleAggregatorTst;
+import net.sourceforge.pmd.test.SimpleAggregatorTst;
 
 /**
  * Test class that tests all custom PMD rules.
@@ -26,5 +26,9 @@ public class CustomRulesTest extends SimpleAggregatorTst {
     @BeforeEach
     public void setUp() {
         addRule("pmd/ruleset/customrules.xml", "UseSLF4JLoggerRule");
+        addRule("pmd/ruleset/customrules.xml", "ImplicitDefaultLocale");
+        addRule("pmd/ruleset/customrules.xml", "ImplicitDefaultTimeZone");
+        addRule("pmd/ruleset/customrules.xml", "SetDefaultLocale");
+        addRule("pmd/ruleset/customrules.xml", "SetDefaultTimeZone");
     }
 }

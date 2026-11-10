@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2022 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -15,11 +15,13 @@ package org.openhab.tools.analysis.checkstyle.readme;
 import static org.openhab.tools.analysis.checkstyle.api.CheckConstants.*;
 
 import java.io.File;
+import java.util.List;
 
 import org.openhab.tools.analysis.checkstyle.api.AbstractStaticCheck;
 
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import com.puppycrawl.tools.checkstyle.api.FileText;
+import com.vladsch.flexmark.ext.yaml.front.matter.YamlFrontMatterExtension;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Node;
 import com.vladsch.flexmark.util.data.MutableDataSet;
@@ -40,15 +42,13 @@ import com.vladsch.flexmark.util.data.MutableDataSet;
 public class MarkdownCheck extends AbstractStaticCheck {
 
     public MarkdownCheck() {
-        setFileExtensions(MARKDONW_EXTENSION);
+        setFileExtensions(MARKDOWN_EXTENSION);
     }
 
     @Override
     protected void processFiltered(File file, FileText fileText) throws CheckstyleException {
-        switch (file.getName()) {
-            case README_MD_FILE_NAME:
-                checkReadMe(fileText);
-                break;
+        if (file.getName().equals(README_MD_FILE_NAME)) {
+            checkReadMe(fileText);
         }
     }
 
@@ -56,15 +56,11 @@ public class MarkdownCheck extends AbstractStaticCheck {
         MutableDataSet options = new MutableDataSet();
         // By setting this option to true, the parser provides line numbers in the original markdown text for each node
         options.set(Parser.TRACK_DOCUMENT_LINES, true);
+        options.set(Parser.EXTENSIONS, List.of(YamlFrontMatterExtension.create()));
 
         Node readmeMarkdownNode = parseMarkdown(fileText, options);
         // CallBack is used in order to use the protected log method of the AbstractStaticCheck in the Visitor
-        MarkdownVisitorCallback callBack = new MarkdownVisitorCallback() {
-            @Override
-            public void log(int line, String message) {
-                MarkdownCheck.this.log(line + 1, message);
-            }
-        };
+        MarkdownVisitorCallback callBack = (line, message) -> MarkdownCheck.this.log(line + 1, message);
         MarkdownVisitor visitor = new MarkdownVisitor(callBack, fileText);
         visitor.visit(readmeMarkdownNode);
     }

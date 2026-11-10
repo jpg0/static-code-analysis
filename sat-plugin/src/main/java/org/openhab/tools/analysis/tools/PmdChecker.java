@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2022 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -60,7 +60,7 @@ public class PmdChecker extends AbstractChecker {
     /**
      * The version of the maven-pmd-plugin that will be used
      */
-    @Parameter(property = "maven.pmd.version", defaultValue = "3.15.0")
+    @Parameter(property = "maven.pmd.version", defaultValue = "3.26.0")
     private String mavenPmdVersion;
 
     /**
@@ -69,7 +69,7 @@ public class PmdChecker extends AbstractChecker {
     @Parameter
     private List<Dependency> pmdPlugins = new ArrayList<>();
 
-    private static final String PMD_VERSION = "6.39.0";
+    private static final String PMD_VERSION = "7.28.0";
     /**
      * Location of the properties files that contains configuration options for the maven-pmd-plugin
      */

@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2022 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -52,10 +52,10 @@ public class LoggedMessagesExtension implements BeforeEachCallback, AfterEachCal
     }
 
     public List<String> getMessages() {
-        return listAppender.list.stream().map(event -> event.getMessage()).collect(Collectors.toList());
+        return listAppender.list.stream().map(ILoggingEvent::getMessage).collect(Collectors.toList());
     }
 
     public List<String> getFormattedMessages() {
-        return listAppender.list.stream().map(event -> event.getFormattedMessage()).collect(Collectors.toList());
+        return listAppender.list.stream().map(ILoggingEvent::getFormattedMessage).collect(Collectors.toList());
     }
 }

@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2022 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -38,7 +38,7 @@ import com.puppycrawl.tools.checkstyle.api.FileText;
  */
 public abstract class AbstractOhInfXmlCheck extends AbstractStaticCheck {
     public static final String THING_DIRECTORY = "thing";
-    public static final String BINDING_DIRECTORY = "binding";
+    public static final String ADDON_DIRECTORY = "addon";
     public static final String CONFIGURATION_DIRECTORY = "config";
 
     private static final String MESSAGE_EMPTY_FILE = "The file {0} should not be empty.";
@@ -66,7 +66,7 @@ public abstract class AbstractOhInfXmlCheck extends AbstractStaticCheck {
     private void processXmlFile(final FileText xmlFileText) throws CheckstyleException {
         final File xmlFile = xmlFileText.getFile();
         if (isEmpty(xmlFileText)) {
-            log(0, MessageFormat.format(MESSAGE_EMPTY_FILE, xmlFile.getName()), xmlFile.getPath());
+            logMessage(xmlFile.getAbsolutePath(), 0, xmlFile.getName(), MESSAGE_EMPTY_FILE);
         } else {
             final File fileParentDirectory = xmlFile.getParentFile();
             final boolean isOHParentDirectory = OH_INF_DIRECTORY.equals(fileParentDirectory.getParentFile().getName());
@@ -77,8 +77,8 @@ public abstract class AbstractOhInfXmlCheck extends AbstractStaticCheck {
                         checkThingTypeFile(xmlFileText);
                         break;
                     }
-                    case BINDING_DIRECTORY: {
-                        checkBindingFile(xmlFileText);
+                    case ADDON_DIRECTORY: {
+                        checkAddonFile(xmlFileText);
                         break;
                     }
                     case CONFIGURATION_DIRECTORY: {
@@ -108,7 +108,7 @@ public abstract class AbstractOhInfXmlCheck extends AbstractStaticCheck {
      * @param xmlFileText Represents the text contents of the xml file
      * @throws CheckstyleException when exception occurred during XML processing
      */
-    protected abstract void checkBindingFile(FileText xmlFileText) throws CheckstyleException;
+    protected abstract void checkAddonFile(FileText xmlFileText) throws CheckstyleException;
 
     /**
      * Validate a .xml file located in the OH-INF/thing directory

@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2022 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -16,7 +16,6 @@ import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.FullIdent;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CheckUtil;
 
 /**
  * Checks if Declarative Service is used for dependency injection in OSGi. A message is logged if
@@ -94,7 +93,7 @@ public class DeclarativeServicesDependencyInjectionCheck extends AbstractCheck {
     }
 
     private String getType(DetailAST classNode) {
-        FullIdent fullType = CheckUtil.createFullType(classNode);
+        FullIdent fullType = FullIdent.createFullIdent(classNode.getFirstChild());
         return fullType.getText();
     }
 

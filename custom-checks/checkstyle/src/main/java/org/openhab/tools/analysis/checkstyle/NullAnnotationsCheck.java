@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2022 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -22,6 +22,7 @@ import org.openhab.tools.analysis.utils.SatCheckUtils;
 
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
+import com.puppycrawl.tools.checkstyle.api.FullIdent;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 import com.puppycrawl.tools.checkstyle.utils.CheckUtil;
 import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
@@ -39,7 +40,7 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
  */
 public class NullAnnotationsCheck extends AbstractCheck {
 
-    private List<String> imports = new ArrayList<String>();
+    private List<String> imports = new ArrayList<>();
 
     private static final String NONNULL_ANNOTATION = NonNull.class.getSimpleName();
     private static final String NULLABLE_ANNOTATION = Nullable.class.getSimpleName();
@@ -83,7 +84,7 @@ public class NullAnnotationsCheck extends AbstractCheck {
         int tokenType = ast.getType();
         switch (tokenType) {
             case TokenTypes.IMPORT:
-                String packageImport = CheckUtil.createFullType(ast).getText();
+                String packageImport = FullIdent.createFullIdent(ast.getFirstChild()).getText();
                 imports.add(packageImport);
                 break;
             case TokenTypes.CLASS_DEF:
@@ -101,7 +102,7 @@ public class NullAnnotationsCheck extends AbstractCheck {
         if (!checkInnerUnits) {
             DetailAST astParent = ast.getParent();
             // if outer class/interface
-            if (astParent == null) {
+            if (astParent == null || astParent.getType() == TokenTypes.COMPILATION_UNIT) {
                 checkForNonNullByDefaultAnnotation(ast);
             }
         } else {

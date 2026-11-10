@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-
   <groupId>org.openhab.tools.sat</groupId>
   <artifactId>pom</artifactId>
-  <version>0.13.0-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Static Code Analysis Tool Parent POM</name>
@@ -27,8 +26,7 @@
 
   <developers>
     <developer>
-      <name>Svilen Valkanov</name>
-      <email>svilen.valkanov@musala.com</email>
+      <name>openHAB Community</name>
     </developer>
   </developers>
 
@@ -52,68 +50,63 @@
     <repository>
       <uniqueVersion>false</uniqueVersion>
       <id>maven</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+      <url>https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/</url>
     </repository>
   </distributionManagement>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <oh.java.version>11</oh.java.version>
-    <maven.compiler.source>${oh.java.version}</maven.compiler.source>
-    <maven.compiler.target>${oh.java.version}</maven.compiler.target>
-    <maven.compiler.compilerVersion>${oh.java.version}</maven.compiler.compilerVersion>
+    <oh.java.version>21</oh.java.version>
+    <maven.compiler.release>${oh.java.version}</maven.compiler.release>
     <maven.eclipse.version>2.10</maven.eclipse.version>
-    <junit.version>5.8.1</junit.version>
-    <commons.io.version>2.11.0</commons.io.version>
-    <commons.lang3.version>3.12.0</commons.lang3.version>
-    <mockito.version>4.0.0</mockito.version>
-    <maven.resources.version>2.4</maven.resources.version>
-    <pmd.version>6.39.0</pmd.version>
-    <checkstyle.version>8.45.1</checkstyle.version>
-    <spotbugs.version>4.4.2</spotbugs.version>
-    <maven.core.version>3.6.0</maven.core.version>
-    <maven.plugin.api.version>3.6.0</maven.plugin.api.version>
-    <maven.plugin.annotations.version>3.6.0</maven.plugin.annotations.version>
-    <maven.plugin.plugin.version>3.6.0</maven.plugin.plugin.version>
-    <maven.plugin.compiler.version>3.8.1</maven.plugin.compiler.version>
-    <mojo.executor.version>2.3.0</mojo.executor.version>
-    <org.apache.ivy.version>2.4.0</org.apache.ivy.version>
-    <org.jsoup.version>1.7.1</org.jsoup.version>
-    <pde.core.version>3.11.1</pde.core.version>
-    <sat.version>0.12.0</sat.version>
-    <jdt-annotations.version>2.1.0</jdt-annotations.version>
-    <flexmark.version>0.64.0</flexmark.version>
-    <maven.surefire.plugin.version>3.0.0-M5</maven.surefire.plugin.version>
-    <jetty.server.version>9.4.20.v20190813</jetty.server.version>
-    <saxon.version>9.1.0.8</saxon.version>
-    <spotless.version>2.0.3</spotless.version>
-    <slf4j.version>1.7.25</slf4j.version>
-    <logback.version>1.2.3</logback.version>
-    <eea.version>2.3.0</eea.version>
+    <junit.version>6.1.3</junit.version>
+    <commons.io.version>2.22.0</commons.io.version>
+    <commons.lang3.version>3.21.0</commons.lang3.version>
+    <mockito.version>5.24.0</mockito.version>
+    <maven.resources.version>3.5.0</maven.resources.version>
+    <pmd.version>7.28.0</pmd.version>
+    <checkstyle.version>14.3.0</checkstyle.version>
+    <spotbugs.version>4.10.5</spotbugs.version>
+    <maven.core.version>3.10.0</maven.core.version>
+    <maven.plugin.api.version>3.10.0</maven.plugin.api.version>
+    <maven.plugin.annotations.version>3.16.0</maven.plugin.annotations.version>
+    <maven.plugin.plugin.version>3.16.0</maven.plugin.plugin.version>
+    <maven.plugin.compiler.version>3.16.0</maven.plugin.compiler.version>
+    <mojo.executor.version>2.4.1</mojo.executor.version>
+    <org.jsoup.version>1.23.2</org.jsoup.version>
+    <sat.version>0.18.0</sat.version>
+    <jdt-annotations.version>2.4.100</jdt-annotations.version>
+    <flexmark.version>0.64.8</flexmark.version>
+    <maven.surefire.plugin.version>3.6.1</maven.surefire.plugin.version>
+    <jetty.server.version>12.1.14</jetty.server.version>
+    <saxon.version>12.10</saxon.version>
+    <spotless.version>3.11.0</spotless.version>
+    <!-- Eclipse Java formatter version 4.26+ does not check test files -->
+    <spotless.eclipse.version>4.25</spotless.eclipse.version>
+    <spotless.eclipse.wtp.version>4.21.0</spotless.eclipse.wtp.version>
+    <slf4j.version>2.0.20</slf4j.version>
+    <logback.version>1.6.5</logback.version>
+    <eea.version>2.4.0</eea.version>
     <m2e.jdt.annotationpath>target/dependency</m2e.jdt.annotationpath>
+    <dom4j.version>2.2.0</dom4j.version>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>javax.xml.bind</groupId>
-      <artifactId>jaxb-api</artifactId>
-      <version>2.3.1</version>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
+      <version>4.0.5</version>
     </dependency>
     <dependency>
       <groupId>org.glassfish.jaxb</groupId>
       <artifactId>jaxb-runtime</artifactId>
-      <version>2.3.1</version>
+      <version>4.0.9</version>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest-library</artifactId>
-      <version>2.2</version>
+      <artifactId>hamcrest</artifactId>
+      <version>3.0</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.activation</groupId>
-      <artifactId>javax.activation</artifactId>
-      <version>1.2.0</version>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -131,8 +124,15 @@
       <!-- Required for Checkstyle tests -->
       <groupId>com.google.truth</groupId>
       <artifactId>truth</artifactId>
-      <version>1.1.3</version>
+      <version>1.4.5</version>
       <scope>test</scope>
+      <exclusions>
+        <!-- JUnit 4 is only needed for Truth's JUnit 4 rules, tests use JUnit Jupiter -->
+        <exclusion>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
@@ -176,10 +176,9 @@
         <plugin>
           <groupId>com.mycila</groupId>
           <artifactId>license-maven-plugin</artifactId>
-          <version>3.0</version>
+          <version>5.1.2</version>
           <configuration>
             <basedir>${basedir}</basedir>
-            <header>licenses/epl-2.0/header.txt</header>
             <quiet>false</quiet>
             <failIfMissing>true</failIfMissing>
             <strictCheck>true</strictCheck>
@@ -187,25 +186,30 @@
             <mapping>
               <xml>xml-header-style</xml>
             </mapping>
-            <headerDefinitions>
-              <headerDefinition>licenses/epl-2.0/xml-header-style.xml</headerDefinition>
-            </headerDefinitions>
-            <includes>
-              <include>**/org/openhab/**/*.java</include>
-              <include>**/OSGI-INF/*.xml</include>
-            </includes>
-            <excludes>
-              <exclude>**/pom.xml</exclude>
-              <exclude>target/**</exclude>
-              <exclude>**/org/openhab/tools/analysis/findbugs/CustomClassNameLengthDetector.java</exclude>
-              <exclude>**/org/openhab/tools/analysis/report/ReportUtility.java</exclude>
-              <exclude>**/org/openhab/tools/analysis/report/ReportMojo.java</exclude>
-            </excludes>
             <useDefaultExcludes>true</useDefaultExcludes>
             <properties>
-              <year>2022</year>
+              <year>2025</year>
             </properties>
             <encoding>UTF-8</encoding>
+            <licenseSets>
+              <licenseSet>
+                <header>licenses/epl-2.0/header.txt</header>
+                <headerDefinitions>
+                  <headerDefinition>licenses/epl-2.0/xml-header-style.xml</headerDefinition>
+                </headerDefinitions>
+                <includes>
+                  <include>**/org/openhab/**/*.java</include>
+                  <include>**/OSGI-INF/*.xml</include>
+                </includes>
+                <excludes>
+                  <exclude>**/pom.xml</exclude>
+                  <exclude>target/**</exclude>
+                  <exclude>**/org/openhab/tools/analysis/findbugs/CustomClassNameLengthDetector.java</exclude>
+                  <exclude>**/org/openhab/tools/analysis/report/ReportUtility.java</exclude>
+                  <exclude>**/org/openhab/tools/analysis/report/ReportMojo.java</exclude>
+                </excludes>
+              </licenseSet>
+            </licenseSets>
           </configuration>
           <executions>
             <execution>
@@ -235,7 +239,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore></ignore>
+                    <ignore/>
                   </action>
                 </pluginExecution>
               </pluginExecutions>
@@ -246,7 +250,13 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
-          <version>3.0.0-M2</version>
+          <version>3.7.0</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>3.7.0</version>
         </plugin>
 
         <plugin>
@@ -272,29 +282,6 @@
         </plugin>
 
         <plugin>
-          <groupId>com.github.ekryd.sortpom</groupId>
-          <artifactId>sortpom-maven-plugin</artifactId>
-          <version>2.10.0</version>
-          <configuration>
-            <predefinedSortOrder>recommended_2008_06</predefinedSortOrder>
-            <createBackupFile>false</createBackupFile>
-            <keepBlankLines>true</keepBlankLines>
-          </configuration>
-          <executions>
-            <execution>
-              <id>sortpom-verify</id>
-              <goals>
-                <goal>verify</goal>
-              </goals>
-              <phase>verify</phase>
-              <configuration>
-                <verifyFail>Stop</verifyFail>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
-
-        <plugin>
           <groupId>com.diffplug.spotless</groupId>
           <artifactId>spotless-maven-plugin</artifactId>
           <version>${spotless.version}</version>
@@ -302,7 +289,7 @@
             <java>
               <eclipse>
                 <file>openhab_codestyle.xml</file>
-                <version>4.13.0</version>
+                <version>${spotless.eclipse.version}</version>
               </eclipse>
               <removeUnusedImports/>
               <importOrder>
@@ -310,6 +297,15 @@
               </importOrder>
               <endWithNewline/>
             </java>
+            <pom>
+              <sortPom>
+                <expandEmptyElements>false</expandEmptyElements>
+                <indentAttribute>schemaLocation</indentAttribute>
+                <predefinedSortOrder>recommended_2008_06</predefinedSortOrder>
+                <sortDependencyExclusions/>
+                <sortDependencyManagement/>
+              </sortPom>
+            </pom>
             <formats>
               <format>
                 <!-- *.xml -->
@@ -325,22 +321,7 @@
                   <files>
                     <file>openhab_wst_xml_files.prefs</file>
                   </files>
-                  <version>4.13.0</version>
-                </eclipseWtp>
-                <trimTrailingWhitespace/>
-                <endWithNewline/>
-              </format>
-              <format>
-                <!-- pom.xml -->
-                <includes>
-                  <include>pom.xml</include>
-                </includes>
-                <eclipseWtp>
-                  <type>XML</type>
-                  <files>
-                    <file>openhab_wst_pom_file.prefs</file>
-                  </files>
-                  <version>4.13.0</version>
+                  <version>${spotless.eclipse.wtp.version}</version>
                 </eclipseWtp>
                 <trimTrailingWhitespace/>
                 <endWithNewline/>
@@ -371,7 +352,7 @@
       <plugin>
         <groupId>org.commonjava.maven.plugins</groupId>
         <artifactId>directory-maven-plugin</artifactId>
-        <version>0.3.1</version>
+        <version>1.0</version>
         <executions>
           <execution>
             <id>directories</id>
@@ -389,6 +370,10 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${maven.surefire.plugin.version}</version>
+        <configuration>
+          <argLine>-javaagent:"${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar"
+              -Xshare:off</argLine>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -405,11 +390,11 @@
         <version>${maven.plugin.compiler.version}</version>
         <configuration>
           <compilerId>eclipse</compilerId>
-          <compilerArguments>
-            <annotationpath>CLASSPATH</annotationpath>
-            <classpath>${project.build.directory}/dependency</classpath>
-          </compilerArguments>
           <compilerArgs>
+            <arg>-annotationpath</arg>
+            <arg>CLASSPATH</arg>
+            <arg>-classpath</arg>
+            <arg>${project.build.directory}/dependency</arg>
             <arg>-err:+nullAnnot(org.eclipse.jdt.annotation.Nullable|org.eclipse.jdt.annotation.NonNull|org.eclipse.jdt.annotation.NonNullByDefault),+inheritNullAnnot,+nullAnnotConflict,-nullUncheckedConversion</arg>
             <arg>-warn:+null,+inheritNullAnnot,+nullAnnotConflict,-nullUncheckedConversion,+nullAnnotRedundant,+nullDereference</arg>
           </compilerArgs>
@@ -420,19 +405,24 @@
           <dependency>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-compiler-eclipse</artifactId>
-            <version>2.8.8</version>
+            <version>2.17.1</version>
+          </dependency>
+          <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-compiler-api</artifactId>
+            <version>2.17.1</version>
           </dependency>
           <dependency>
             <groupId>org.eclipse.jdt</groupId>
             <artifactId>ecj</artifactId>
-            <version>3.23.0</version>
+            <version>3.46.100</version>
           </dependency>
         </dependencies>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-        <version>2.4</version>
+        <version>3.4.0</version>
         <configuration>
           <attach>true</attach>
         </configuration>
@@ -449,10 +439,11 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.1.1</version>
+        <version>3.12.0</version>
         <configuration>
-          <source>11</source>
+          <source>21</source>
           <outputDirectory>${project.build.directory}/javadoc</outputDirectory>
+          <doclint>all,-missing</doclint>
           <failOnError>true</failOnError>
         </configuration>
         <executions>
@@ -461,9 +452,6 @@
             <goals>
               <goal>jar</goal>
             </goals>
-            <configuration>
-              <additionalparam>${javadoc.opts}</additionalparam>
-            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -478,17 +466,16 @@
             </goals>
             <configuration>
               <rules>
+                <requireMavenVersion>
+                  <version>3.7.0</version>
+                </requireMavenVersion>
                 <requireJavaVersion>
-                  <version>[11.0,12.0)</version>
+                  <version>[21.0,22.0),[25.0,26.0)</version>
                 </requireJavaVersion>
               </rules>
             </configuration>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>com.github.ekryd.sortpom</groupId>
-        <artifactId>sortpom-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
@@ -497,7 +484,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
-        <version>3.1.2</version>
+        <version>3.11.0</version>
         <executions>
           <execution>
             <id>unpack-eea</id>
@@ -582,7 +569,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.5</version>
+            <version>3.2.8</version>
             <executions>
               <execution>
                 <id>sign-artifacts</id>

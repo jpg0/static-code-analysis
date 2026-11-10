@@ -56,6 +56,7 @@
 					a {color: #000000;}
 					
 					@media (prefers-color-scheme: dark) {
+						:root {color-scheme:dark;}
 						body {color:#dddddd;background-color:#121212;}
 						table.details tr th a {color:#dddddd;}
 						table.details tr th {background:#0f0f0f;}
@@ -267,7 +268,7 @@
 	</xsl:template>
 
 	<xsl:template name="findbugs_link">
-		<xsl:text disable-output-escaping="yes"> &lt;a href="http://findbugs.sourceforge.net/bugDescriptions.html#</xsl:text>
+		<xsl:text disable-output-escaping="yes"> &lt;a href="https://findbugs.sourceforge.net/bugDescriptions.html#</xsl:text>
 		<xsl:value-of select="@rule_id" />
 		<xsl:text disable-output-escaping="yes">"&gt;</xsl:text>
 		<xsl:value-of select="@rule" />

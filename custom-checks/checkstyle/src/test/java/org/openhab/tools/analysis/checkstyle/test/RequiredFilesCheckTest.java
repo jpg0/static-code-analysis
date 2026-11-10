@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2022 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -38,8 +38,6 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
  * @author Svilen Valkanov - Use relative path for required files
  */
 public class RequiredFilesCheckTest extends AbstractStaticCheckTest {
-    private static final String MANIFEST_RELATIVE_PATH_NAME = META_INF_DIRECTORY_NAME + File.separator
-            + MANIFEST_FILE_NAME;
     private static final String MISSING_FILE_MSG = "Missing %s file.";
 
     private static DefaultConfiguration config;
@@ -48,17 +46,16 @@ public class RequiredFilesCheckTest extends AbstractStaticCheckTest {
     public static void setUpClass() {
         config = createModuleConfig(RequiredFilesCheck.class);
 
-        String extenstionsPropertyValue = String.format("%s,%s,%s,%s,%s", HTML_EXTENSION, PROPERTIES_EXTENSION,
-                XML_EXTENSION, MANIFEST_EXTENSION, MARKDONW_EXTENSION);
-        config.addProperty("extensions", extenstionsPropertyValue);
+        String extensionsPropertyValue = String.format("%s,%s,%s,%s", HTML_EXTENSION, PROPERTIES_EXTENSION,
+                XML_EXTENSION, MARKDOWN_EXTENSION);
+        config.addProperty("extensions", extensionsPropertyValue);
 
-        String requiredFilesPropertyValue = String.format("%s,%s,%s,%s", BUILD_PROPERTIES_FILE_NAME, POM_XML_FILE_NAME,
-                MANIFEST_RELATIVE_PATH_NAME, README_MD_FILE_NAME);
+        String requiredFilesPropertyValue = String.format("%s,%s", POM_XML_FILE_NAME, README_MD_FILE_NAME);
         config.addProperty("requiredFiles", requiredFilesPropertyValue);
     }
 
     @Override
-    protected String getPackageLocation() {
+    public String getPackageLocation() {
         return "checkstyle/requiredFilesCheckTest";
     }
 
@@ -76,17 +73,6 @@ public class RequiredFilesCheckTest extends AbstractStaticCheckTest {
     }
 
     @Test
-    public void testMissingBuildPropertiesFile() throws Exception {
-        verifyDirectory("missing_build_properties_directory", BUILD_PROPERTIES_FILE_NAME,
-                String.format(MISSING_FILE_MSG, BUILD_PROPERTIES_FILE_NAME));
-    }
-
-    @Test
-    public void testPresentBuildPropertiesFile() throws Exception {
-        verifyDirectory("valid_directory", BUILD_PROPERTIES_FILE_NAME, null);
-    }
-
-    @Test
     public void testMissingPomXmlFile() throws Exception {
         verifyDirectory("missing_pom_xml_directory", POM_XML_FILE_NAME,
                 String.format(MISSING_FILE_MSG, POM_XML_FILE_NAME));
@@ -95,17 +81,6 @@ public class RequiredFilesCheckTest extends AbstractStaticCheckTest {
     @Test
     public void testPresentPomXmlFile() throws Exception {
         verifyDirectory("valid_directory", POM_XML_FILE_NAME, null);
-    }
-
-    @Test
-    public void testMissingManifestMfFile() throws Exception {
-        verifyDirectory("missing_manifest_mf_directory", MANIFEST_RELATIVE_PATH_NAME,
-                String.format(MISSING_FILE_MSG, MANIFEST_FILE_NAME));
-    }
-
-    @Test
-    public void testPresentManifestMfFile() throws Exception {
-        verifyDirectory("valid_directory", MANIFEST_FILE_NAME, null);
     }
 
     @Test
@@ -125,10 +100,8 @@ public class RequiredFilesCheckTest extends AbstractStaticCheckTest {
 
         Map<String, List<String>> expectedViolations = new HashMap<>();
 
-        addExpectedViolation(expectedViolations, MANIFEST_RELATIVE_PATH_NAME, MANIFEST_FILE_NAME);
         // Checkstyle can't check on files without extension. Therefore ignore for now:
         // addExpectedViolation(expectedViolations, NOTICE_FILE_NAME, NOTICE_FILE_NAME);
-        addExpectedViolation(expectedViolations, BUILD_PROPERTIES_FILE_NAME, BUILD_PROPERTIES_FILE_NAME);
         addExpectedViolation(expectedViolations, POM_XML_FILE_NAME, POM_XML_FILE_NAME);
         addExpectedViolation(expectedViolations, README_MD_FILE_NAME, README_MD_FILE_NAME);
 
@@ -158,7 +131,7 @@ public class RequiredFilesCheckTest extends AbstractStaticCheckTest {
     private File[] getFilesForDirectory(String directoryName) throws IOException {
         String directoryAbsolutePath = getPath(directoryName);
         File directory = new File(directoryAbsolutePath);
-        File[] files = listFilesForDirectory(directory, new ArrayList<File>());
+        File[] files = listFilesForDirectory(directory, new ArrayList<>());
         return files;
     }
 }

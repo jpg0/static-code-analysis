@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2022 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -27,5 +27,5 @@ public interface MarkdownVisitorCallback {
      * @param line line number of the logged message
      * @param message the message that is logged for the error
      */
-    public void log(int line, String message);
+    void log(int line, String message);
 }

@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2022 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -47,7 +47,7 @@ public class OhInfXmlUsageCheckTest extends AbstractStaticCheckTest {
     private static final DefaultConfiguration CONFIGURATION = createModuleConfig(OhInfXmlUsageCheck.class);
 
     @Override
-    protected String getPackageLocation() {
+    public String getPackageLocation() {
         return "checkstyle/ohInfXmlUsageCheckTest";
     }
 
@@ -67,7 +67,7 @@ public class OhInfXmlUsageCheckTest extends AbstractStaticCheckTest {
     public void testMissingConfigRef() throws Exception {
         String[] expectedMessages = generateExpectedMessages(0,
                 MessageFormat.format(MESSAGE_MISSING_URI_CONFIGURATION, "binding:ge:config"));
-        verifyWithPath("missingConfigDesciptionRef", RELATIVE_PATH_TO_THING, expectedMessages);
+        verifyWithPath("missingConfigDescriptionRef", RELATIVE_PATH_TO_THING, expectedMessages);
     }
 
     @Test

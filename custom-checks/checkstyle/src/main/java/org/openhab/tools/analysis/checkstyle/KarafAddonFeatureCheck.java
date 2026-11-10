@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2022 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -146,7 +146,7 @@ public class KarafAddonFeatureCheck extends AbstractStaticCheck {
 
         if (!featureFile.exists()) {
             if (isExcludedAddon(parent)) {
-                logger.debug("Ignore check on none exisiting feature name {}", featureFile);
+                logger.debug("Ignore check on none existing feature name {}", featureFile);
             } else {
                 logMessage(featureFile.toString(), 0, FEATURE_XML,
                         MessageFormat.format(MSG_MISSING_FEATURE_XML, featureFile));
@@ -181,7 +181,7 @@ public class KarafAddonFeatureCheck extends AbstractStaticCheck {
         }
     }
 
-    private boolean isExcludedAddon(String parent) {
+    private boolean isExcludedAddon(@Nullable String parent) {
         return excludeAddonsList.stream().anyMatch(p -> p.matcher(parent).find());
     }
 

@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2022 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -81,7 +81,7 @@ public class AuthorContributionDescriptionCheck extends AbstractCheck {
     }
 
     public void setRequiredContributionDescriptions(String[] contributionDescriptions) {
-        this.requiredContributionDescriptions = new ArrayList<String>(Arrays.asList(contributionDescriptions));
+        this.requiredContributionDescriptions = new ArrayList<>(Arrays.asList(contributionDescriptions));
         setWarningMessageFirstAuthorDescription(requiredContributionDescriptions);
     }
 
@@ -97,15 +97,14 @@ public class AuthorContributionDescriptionCheck extends AbstractCheck {
      */
     private void setWarningMessageFirstAuthorDescription(List<String> contributionDescriptions) {
         warningMessageFirstAuthorDescription = contributionDescriptions.stream().map(Object::toString)
-                .collect(Collectors.joining(WARNING_MESSAGE_DELIMITER, WARNING_MESSAGE_PREFIX, WARNING_MESSAGE_SUFFIX))
-                .toString();
+                .collect(Collectors.joining(WARNING_MESSAGE_DELIMITER, WARNING_MESSAGE_PREFIX, WARNING_MESSAGE_SUFFIX));
     }
 
     @Override
     public void visitToken(DetailAST ast) {
         if (!checkInnerUnits) {
             DetailAST astParent = ast.getParent();
-            if (astParent == null) {
+            if (astParent == null || astParent.getType() == TokenTypes.COMPILATION_UNIT) {
                 visit(ast);
             }
         } else {

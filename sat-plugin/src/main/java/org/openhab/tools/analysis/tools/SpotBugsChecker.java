@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2022 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -25,10 +25,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-
 import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
@@ -38,6 +34,10 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.openhab.tools.analysis.tools.internal.SpotBugsVisitors;
 import org.twdata.maven.mojoexecutor.MojoExecutor.Element;
+
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 
 /**
  * <p>
@@ -83,7 +83,7 @@ public class SpotBugsChecker extends AbstractChecker {
     /**
      * The version of the spotbugs-maven-plugin that will be used
      */
-    @Parameter(property = "maven.spotbugs.version", defaultValue = "4.4.2.2")
+    @Parameter(property = "maven.spotbugs.version", defaultValue = "4.10.5.0")
     private String spotbugsMavenPluginVersion;
 
     /**
@@ -95,7 +95,7 @@ public class SpotBugsChecker extends AbstractChecker {
     /**
      * The version of the spotbugs that will be used
      */
-    @Parameter(property = "spotbugs.version", defaultValue = "4.4.2")
+    @Parameter(property = "spotbugs.version", defaultValue = "4.10.5")
     private String spotBugsVersion;
 
     /**
@@ -166,8 +166,9 @@ public class SpotBugsChecker extends AbstractChecker {
 
         // These configuration properties are not exposed from the spotbugs-maven-plugin as user
         // properties, so they have to be set direct in the configuration
-        Xpp3Dom config = configuration(element("outputDirectory", outputDir), element("xmlOutputDirectory", outputDir),
-                element("spotbugsXmlOutputDirectory", outputDir), getSpotBugsPlugins(spotbugsPlugins));
+        Xpp3Dom config = configuration(element("maxHeap", "1024"), element("outputDirectory", outputDir),
+                element("xmlOutputDirectory", outputDir), element("spotbugsXmlOutputDirectory", outputDir),
+                getSpotBugsPlugins(spotbugsPlugins));
 
         // If this dependency is missing, spotbugs can not load the core plugin because of classpath
         // issues
@@ -212,7 +213,7 @@ public class SpotBugsChecker extends AbstractChecker {
             try {
                 stream = new FileInputStream(file);
             } catch (FileNotFoundException e) {
-                getLog().warn("Unable to find file " + resolvedPath.toString());
+                getLog().warn("Unable to find file " + resolvedPath);
             }
         } else {
             stream = this.getClass().getClassLoader().getResourceAsStream(SpotBugsChecker.DEFAULT_VISITORS_XML);

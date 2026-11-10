@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2022 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -17,31 +17,30 @@ import org.openhab.tools.analysis.checkstyle.MissingJavadocFilterCheck;
 import org.openhab.tools.analysis.checkstyle.api.AbstractStaticCheckTest;
 
 import com.puppycrawl.tools.checkstyle.DefaultConfiguration;
-import com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck;
 import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
- * Tests for {@link JavadocInnerClassesFilterCheck}
+ * Tests for {@link MissingJavadocFilterCheck}
  *
  * @author Petar Valchev - Initial contribution
  */
 public class MissingJavadocFilterCheckTest extends AbstractStaticCheckTest {
 
     @Override
-    protected String getPackageLocation() {
+    public String getPackageLocation() {
         return "checkstyle/missingJavadocFilterCheckTest";
     }
 
     @Test
     public void testOuterClassWithJavadoc() throws Exception {
         String[] locations = new String[] { "10:1" };
-        verifyJavadoc("MissingJavadocOuterAndInnnerClass.java", false, locations);
+        verifyJavadoc("MissingJavadocOuterAndInnerClass.java", false, locations);
     }
 
     @Test
     public void testOuterAndInnerClassesWithJavadoc() throws Exception {
         String[] locations = new String[] { "10:1", "12:5" };
-        verifyJavadoc("MissingJavadocOuterAndInnnerClass.java", true, locations);
+        verifyJavadoc("MissingJavadocOuterAndInnerClass.java", true, locations);
     }
 
     @Test
@@ -61,11 +60,11 @@ public class MissingJavadocFilterCheckTest extends AbstractStaticCheckTest {
 
         String filePath = getPath(testFileName);
 
-        String[] expectedMessages = null;
+        String[] expectedMessages;
         if (locations != null) {
             expectedMessages = new String[locations.length];
             for (int i = 0; i < locations.length; i++) {
-                expectedMessages[i] = locations[i] + ": " + JavadocStyleCheck.MSG_JAVADOC_MISSING;
+                expectedMessages[i] = locations[i] + ": " + MissingJavadocFilterCheck.MSG_JAVADOC_MISSING;
             }
         } else {
             expectedMessages = CommonUtil.EMPTY_STRING_ARRAY;

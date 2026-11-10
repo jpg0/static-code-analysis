@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2022 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -53,7 +53,7 @@ public class CheckstyleChecker extends AbstractChecker {
     /**
      * The version of the maven-checkstyle-plugin that will be used
      */
-    @Parameter(property = "maven.checkstyle.version", defaultValue = "3.1.2")
+    @Parameter(property = "maven.checkstyle.version", defaultValue = "3.6.0")
     private String checkstyleMavenVersion;
 
     /**
@@ -106,9 +106,9 @@ public class CheckstyleChecker extends AbstractChecker {
         log.debug("Ruleset location is " + ruleset);
         userProps.setProperty(CHECKSTYLE_RULE_SET_PROPERTY, ruleset);
 
-        String supression = getLocation(checkstyleFilter, DEFAULT_FILTER_XML);
-        log.debug("Filter location is " + supression);
-        userProps.setProperty(CHECKSTYLE_SUPPRESSION_PROPERTY, supression);
+        String suppression = getLocation(checkstyleFilter, DEFAULT_FILTER_XML);
+        log.debug("Filter location is " + suppression);
+        userProps.setProperty(CHECKSTYLE_SUPPRESSION_PROPERTY, suppression);
 
         if (checkstyleProperties != null) {
             String rulesetProperties = getLocation(checkstyleProperties, "");
@@ -117,8 +117,9 @@ public class CheckstyleChecker extends AbstractChecker {
         }
 
         checkstylePlugins.add(dependency("org.openhab.tools.sat.custom-checks", "checkstyle", plugin.getVersion()));
-        // Maven may load an older version, if no version is specified
-        checkstylePlugins.add(dependency("com.puppycrawl.tools", "checkstyle", "8.45.1"));
+        // Maven may load an older version, if no version is specified.
+        // Must match ${checkstyle.version} in the root pom.xml, which the custom checks are compiled against.
+        checkstylePlugins.add(dependency("com.puppycrawl.tools", "checkstyle", "14.3.0"));
         checkstylePlugins.forEach(logDependency());
 
         String baseDir = mavenProject.getBasedir().toString();

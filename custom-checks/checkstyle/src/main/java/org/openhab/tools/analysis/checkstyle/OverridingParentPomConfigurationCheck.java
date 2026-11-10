@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2022 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -57,7 +57,7 @@ public class OverridingParentPomConfigurationCheck extends AbstractStaticCheck {
                 try {
                     nodes = (NodeList) xpathExpression.evaluate(document, XPathConstants.NODESET);
                 } catch (XPathExpressionException e) {
-                    logger.error("An error has occured while parsing the pom.xml. Check if the file is valid.", e);
+                    logger.error("An error has occurred while parsing the pom.xml. Check if the file is valid.", e);
                 }
 
                 if (nodes != null) {
